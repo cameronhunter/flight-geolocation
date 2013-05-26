@@ -1,17 +1,11 @@
 describeComponent('lib/location', function () {
 
   beforeEach(function() {
-    setupComponent({
-      enableHighAccuracy: false,
-      timeout: Infinity,
-      maximumAge: undefined
-    });
+    setupComponent();
   });
 
-  describe('Location', function() {
-    it('should support this functionality', function() {
-      expect(this.component.get).toBeDefined();
-    });
+  it('should be defined', function() {
+    expect(this.component).toBeDefined();
   });
 
 });

@@ -11,18 +11,17 @@ bower install --save flight-location
 ## Example
 
 ```javascript
-define(['flight-location/location'], function(Location) {
+define(['flight-location'], function(Location) {
 
   // Setup the store
   Location.attachTo(document, {
-    adapter: 'local-storage',
-    saveEvent: 'storage-save',
-    getEvent: 'storage-get',
-    clearEvent: 'storage-clear'
+    enableHighAccuracy: false,
+    timeout: 500,
+    maximumAge: 500
   });
 
   // Listen for geo-location updates
-  $(document).on('location-update', function(e, data) {
+  $(document).on('location-current', function(e, data) {
     console.log(e, data);
   });
 

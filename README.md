@@ -1,4 +1,4 @@
-# flight-location [![Build Status](https://secure.travis-ci.org/cameronhunter/flight-location.png)](http://travis-ci.org/cameronhunter/flight-location)
+# flight-location
 
 A [Flight](https://github.com/twitter/flight) component for geo-location.
 
@@ -13,7 +13,6 @@ bower install --save flight-location
 ```javascript
 define(['flight-location'], function(Location) {
 
-  // Setup the store
   Location.attachTo(document, {
     enableHighAccuracy: false,
     timeout: 500,
@@ -29,6 +28,9 @@ define(['flight-location'], function(Location) {
   $(document).on('location-error', function(e, data) {
     console.error(e, data);
   });
+
+  // Start geo-location updates
+  $(document).trigger('location-watch');
 });
 ```
 

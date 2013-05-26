@@ -1,6 +1,7 @@
 {
   "name": "flight-location",
   "description": "Geo-location component for Flight.",
+  "main": "lib/location.js",
   "version": "0.1.0",
   "dependencies": {
     "flight": "1.0.0"

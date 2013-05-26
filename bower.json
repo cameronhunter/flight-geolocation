@@ -1,0 +1,12 @@
+{
+  "name": "flight-location",
+  "description": "Geo-location component for Flight.",
+  "version": "0.1.0",
+  "dependencies": {
+    "flight": "1.0.0"
+  },
+  "devDependencies": {
+    "jasmine-jquery": "1.5.0",
+    "flight-jasmine": "1.0.0"
+  }
+}

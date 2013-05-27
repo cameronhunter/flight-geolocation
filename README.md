@@ -1,4 +1,4 @@
-# flight-geolocation
+# flight-geolocation [![Build Status](https://secure.travis-ci.org/cameronhunter/flight-geolocation.png)](http://travis-ci.org/cameronhunter/flight-geolocation)
 
 A [Flight](https://github.com/twitter/flight) component for geo-location.
 

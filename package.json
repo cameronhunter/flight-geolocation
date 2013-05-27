@@ -1,5 +1,5 @@
 {
-  "name": "flight-location",
+  "name": "flight-geolocation",
   "description": "Geo-location component for Flight.",
   "version": "0.1.0",
   "devDependencies": {

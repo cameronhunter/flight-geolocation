@@ -1,36 +1,39 @@
-# flight-location
+# flight-geolocation
 
 A [Flight](https://github.com/twitter/flight) component for geo-location.
 
 ## Installation
 
 ```bash
-bower install --save flight-location
+bower install --save flight-geolocation
 ```
 
 ## Example
 
 ```javascript
-define(['flight-location'], function(Location) {
+define(['flight-geolocation'], function(GeoLocation) {
 
-  Location.attachTo(document, {
+  GeoLocation.attachTo(document, {
     enableHighAccuracy: false,
     timeout: 500,
     maximumAge: 500
   });
 
   // Listen for geo-location updates
-  $(document).on('location-current', function(e, data) {
-    console.log(e, data);
+  $(document).on('geolocation-update', function(e, position) {
+    console.log(e, position);
   });
 
   // Listen for errors
-  $(document).on('location-error', function(e, data) {
-    console.error(e, data);
+  $(document).on('geolocation-error', function(e, error) {
+    console.error(e, error);
   });
 
-  // Start geo-location updates
-  $(document).trigger('location-watch');
+  // Query current location
+  $(document).trigger('geolocation-current');
+
+  // Watch for geo-location updates
+  $(document).trigger('geolocation-watch');
 });
 ```
 

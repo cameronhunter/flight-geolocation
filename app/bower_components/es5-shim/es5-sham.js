@@ -15,24 +15,6 @@
     }
 })(function () {
 
-
-var call = Function.prototype.call;
-var prototypeOfObject = Object.prototype;
-var owns = call.bind(prototypeOfObject.hasOwnProperty);
-
-// If JS engine supports accessors creating shortcuts.
-var defineGetter;
-var defineSetter;
-var lookupGetter;
-var lookupSetter;
-var supportsAccessors;
-if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
-    defineGetter = call.bind(prototypeOfObject.__defineGetter__);
-    defineSetter = call.bind(prototypeOfObject.__defineSetter__);
-    lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);
-    lookupSetter = call.bind(prototypeOfObject.__lookupSetter__);
-}
-
 // ES5 15.2.3.2
 // http://es5.github.com/#x15.2.3.2
 if (!Object.getPrototypeOf) {
@@ -48,53 +30,15 @@ if (!Object.getPrototypeOf) {
     };
 }
 
-//ES5 15.2.3.3
-//http://es5.github.com/#x15.2.3.3
-
-function doesGetOwnPropertyDescriptorWork(object) {
-    try {
-        object.sentinel = 0;
-        return Object.getOwnPropertyDescriptor(
-                object,
-                "sentinel"
-        ).value === 0;
-    } catch (exception) {
-        // returns falsy
-    }
-}
-
-//check whether getOwnPropertyDescriptor works if it's given. Otherwise,
-//shim partially.
-if (Object.defineProperty) {
-    var getOwnPropertyDescriptorWorksOnObject = 
-        doesGetOwnPropertyDescriptorWork({});
-    var getOwnPropertyDescriptorWorksOnDom = typeof document == "undefined" ||
-    doesGetOwnPropertyDescriptorWork(document.createElement("div"));
-    if (!getOwnPropertyDescriptorWorksOnDom || 
-            !getOwnPropertyDescriptorWorksOnObject
-    ) {
-        var getOwnPropertyDescriptorFallback = Object.getOwnPropertyDescriptor;
-    }
-}
-
-if (!Object.getOwnPropertyDescriptor || getOwnPropertyDescriptorFallback) {
+// ES5 15.2.3.3
+// http://es5.github.com/#x15.2.3.3
+if (!Object.getOwnPropertyDescriptor) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a non-object: ";
 
     Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
         if ((typeof object != "object" && typeof object != "function") || object === null) {
             throw new TypeError(ERR_NON_OBJECT + object);
         }
-
-        // make a valiant attempt to use the real getOwnPropertyDescriptor
-        // for I8's DOM elements.
-        if (getOwnPropertyDescriptorFallback) {
-            try {
-                return getOwnPropertyDescriptorFallback.call(Object, object, property);
-            } catch (exception) {
-                // try the shim if the real one doesn't work
-            }
-        }
-
         // If object does not owns property return undefined immediately.
         if (!owns(object, property)) {
             return;
@@ -137,7 +81,6 @@ if (!Object.getOwnPropertyDescriptor || getOwnPropertyDescriptorFallback) {
         // If we got this far we know that object has an own property that is
         // not an accessor so we set it as a value and return descriptor.
         descriptor.value = object[property];
-        descriptor.writable = true;
         return descriptor;
     };
 }
@@ -153,64 +96,15 @@ if (!Object.getOwnPropertyNames) {
 // ES5 15.2.3.5
 // http://es5.github.com/#x15.2.3.5
 if (!Object.create) {
-
-    // Contributed by Brandon Benvie, October, 2012
-    var createEmpty;
-    var supportsProto = Object.prototype.__proto__ === null;
-    if (supportsProto || typeof document == 'undefined') {
-        createEmpty = function () {
-            return { "__proto__": null };
-        };
-    } else {
-        // In old IE __proto__ can't be used to manually set `null`, nor does
-        // any other method exist to make an object that inherits from nothing,
-        // aside from Object.prototype itself. Instead, create a new global
-        // object and *steal* its Object.prototype and strip it bare. This is
-        // used as the prototype to create nullary objects.
-        createEmpty = function () {
-            var iframe = document.createElement('iframe');
-            var parent = document.body || document.documentElement;
-            iframe.style.display = 'none';
-            parent.appendChild(iframe);
-            iframe.src = 'javascript:';
-            var empty = iframe.contentWindow.Object.prototype;
-            parent.removeChild(iframe);
-            iframe = null;
-            delete empty.constructor;
-            delete empty.hasOwnProperty;
-            delete empty.propertyIsEnumerable;
-            delete empty.isPrototypeOf;
-            delete empty.toLocaleString;
-            delete empty.toString;
-            delete empty.valueOf;
-            empty.__proto__ = null;
-
-            function Empty() {}
-            Empty.prototype = empty;
-            // short-circuit future calls
-            createEmpty = function () {
-                return new Empty();
-            };
-            return new Empty();
-        };
-    }
-
     Object.create = function create(prototype, properties) {
-
         var object;
-        function Type() {}  // An empty constructor.
-
         if (prototype === null) {
-            object = createEmpty();
+            object = { "__proto__": null };
         } else {
-            if (typeof prototype !== "object" && typeof prototype !== "function") {
-                // In the native implementation `parent` can be `null`
-                // OR *any* `instanceof Object`  (Object|Function|Array|RegExp|etc)
-                // Use `typeof` tho, b/c in old IE, DOM elements are not `instanceof Object`
-                // like they are in modern browsers. Using `Object.create` on DOM elements
-                // is...err...probably inappropriate, but the native version allows for it.
-                throw new TypeError("Object prototype may only be an Object or null"); // same msg as Chrome
+            if (typeof prototype != "object") {
+                throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
             }
+            var Type = function () {};
             Type.prototype = prototype;
             object = new Type();
             // IE has no built-in implementation of `Object.getPrototypeOf`
@@ -219,11 +113,9 @@ if (!Object.create) {
             // objects created using `Object.create`
             object.__proto__ = prototype;
         }
-
         if (properties !== void 0) {
             Object.defineProperties(object, properties);
         }
-
         return object;
     };
 }
@@ -256,8 +148,7 @@ if (Object.defineProperty) {
     var definePropertyWorksOnDom = typeof document == "undefined" ||
         doesDefinePropertyWork(document.createElement("div"));
     if (!definePropertyWorksOnObject || !definePropertyWorksOnDom) {
-        var definePropertyFallback = Object.defineProperty,
-            definePropertiesFallback = Object.defineProperties;
+        var definePropertyFallback = Object.defineProperty;
     }
 }
 
@@ -337,17 +228,8 @@ if (!Object.defineProperty || definePropertyFallback) {
 
 // ES5 15.2.3.7
 // http://es5.github.com/#x15.2.3.7
-if (!Object.defineProperties || definePropertiesFallback) {
+if (!Object.defineProperties) {
     Object.defineProperties = function defineProperties(object, properties) {
-        // make a valiant attempt to use the real defineProperties
-        if (definePropertiesFallback) {
-            try {
-                return definePropertiesFallback.call(Object, object, properties);
-            } catch (exception) {
-                // try the shim if the real one doesn't work
-            }
-        }
-
         for (var property in properties) {
             if (owns(properties, property) && property != "__proto__") {
                 Object.defineProperty(object, property, properties[property]);

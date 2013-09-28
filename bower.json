@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "es5-shim": "~2.0.0",
-    "flight": "~1.0.7",
+    "flight": "~1.0.11",
     "jquery": "~1.9.1",
     "requirejs": "~2.1.5",
     "flight-geolocation": "latest"

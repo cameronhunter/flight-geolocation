@@ -19,5 +19,5 @@
   },
   "_source": "git://github.com/cameronhunter/flight-geolocation.git",
   "_target": "*",
-  "_originalSource": "git://github.com/cameronhunter/flight-geolocation.git"
+  "_originalSource": "flight-geolocation"
 }

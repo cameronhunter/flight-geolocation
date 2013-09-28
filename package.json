@@ -1,0 +1,11 @@
+{
+  "name": "flight-geolocation-app",
+  "version": "0.0.0",
+  "devDependencies": {
+    "generator-flight": "~0.1.0",
+    "karma": "~0.8.5"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/karma start --browsers Firefox --single-run"
+  }
+}

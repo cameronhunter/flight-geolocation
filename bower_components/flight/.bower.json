@@ -1,0 +1,30 @@
+{
+  "name": "flight",
+  "description": "Clientside component infrastructure",
+  "main": "lib/index.js",
+  "version": "1.0.11",
+  "ignore": [
+    "lib/standalone",
+    "test",
+    ".gitignore",
+    ".travis.yml",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "Makefile",
+    "package.json"
+  ],
+  "dependencies": {
+    "es5-shim": "git://github.com/kriskowal/es5-shim.git#2.0.0",
+    "jquery": "1.8.3"
+  },
+  "homepage": "https://github.com/flightjs/flight",
+  "_release": "1.0.11",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.11",
+    "commit": "ed75f11a717755492b6968da3640093e0b1e7b09"
+  },
+  "_source": "git://github.com/flightjs/flight.git",
+  "_target": "~1.0.7",
+  "_originalSource": "flight"
+}

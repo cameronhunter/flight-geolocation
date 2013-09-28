@@ -6,7 +6,7 @@
     "flight": "~1.0.7",
     "jquery": "~1.9.1",
     "requirejs": "~2.1.5",
-    "flight-geolocation": "git://github.com/cameronhunter/flight-geolocation.git"
+    "flight-geolocation": "latest"
   },
   "devDependencies": {
     "flight-jasmine": "~1.0.0",
